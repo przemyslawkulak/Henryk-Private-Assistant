@@ -1,0 +1,55 @@
+.chat-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+
+  mat-card {
+    width: 80%;
+    border: rgb(165, 165, 165) 1px solid;
+  }
+
+  mat-card-actions {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+  }
+}
+
+::ng-deep mat-card {
+  .mdc-list-item.mdc-list-item--with-one-line {
+    height: 100%;
+    border-bottom: #6b6a6a 1px solid;
+  }
+  & .mdc-list-item__primary-text,
+  .mdc-list-item__content {
+    white-space: pre-line;
+  }
+}
+
+.markdown-container {
+  padding-top: 15px;
+}
+.sidenav-container {
+  height: calc(100% - 64px);
+  width: 100%;
+}
+
+.mat-mdc-nav-list {
+  width: 350px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mat-mdc-nav-list .mat-mdc-list-item {
+  overflow: hidden;
+  max-width: 350px;
+}
+
+.send-button {
+  margin-right: 10px;
+  margin-left: 10px;
+}

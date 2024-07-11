@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Message {
+  id              Int      @id @default(autoincrement())
+  conversation_id String
+  createdAt       DateTime @default(now())
+  human           String?
+  ai              String?
+  system          String?
+  active          Boolean  @default(true)
+}
+
+model Meal {
+  id          Int       @id @default(autoincrement())
+  name        String
+  lastUsed    DateTime?
+  created     DateTime  @default(now())
+  dinner      Boolean   @default(false)
+  supper      Boolean   @default(false)
+  pasta       Boolean   @default(false)
+  groats      Boolean   @default(false)
+  rice        Boolean   @default(false)
+  potatoes    Boolean   @default(false)
+  legumes     Boolean   @default(false)
+  tortilla    Boolean   @default(false)
+  flatBread   Boolean   @default(false)
+  chicken     Boolean   @default(false)
+  pork        Boolean   @default(false)
+  beef        Boolean   @default(false)
+  vege        Boolean   @default(false)
+  fish        Boolean   @default(false)
+  turkey      Boolean   @default(false)
+  ham         Boolean   @default(false)
+  soup        Boolean   @default(false)
+  salad       Boolean   @default(false)
+  recipe      String    @default("")
+  ingredients String    @default("")
+}

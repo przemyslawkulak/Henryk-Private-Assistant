@@ -1,0 +1,68 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="drawer.toggle()">
+    <mat-icon>{{ drawerOpen ? "chevron_left" : "chevron_right" }}</mat-icon>
+  </button>
+  <span class="spacer"></span>
+  <span>Henryk, The Professional Assistant</span>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer mode="side" [(opened)]="drawerOpen">
+    <mat-nav-list>
+      <mat-list-item *ngFor="let conversation of conversations | async">
+        <div
+          #tooltip="matTooltip"
+          [matTooltip]="conversation.human || ''"
+          [matTooltipPositionAtOrigin]="'right'"
+        >
+          {{ conversation.human }}
+        </div>
+      </mat-list-item>
+    </mat-nav-list>
+    <button
+      mat-raised-button
+      color="primary send-button"
+      (click)="loadMoreConversations()"
+    >
+      Load More
+    </button>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="chat-container">
+      <mat-card>
+        <mat-card-content>
+          <mat-list>
+            <mat-list-item *ngFor="let message of messages">
+              <div class="markdown-container">
+                <markdown [data]="message"></markdown>
+              </div>
+            </mat-list-item>
+          </mat-list>
+          <mat-form-field class="full-width">
+            <textarea
+              matInput
+              placeholder="Type your message"
+              [(ngModel)]="userInput"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              (keydown.enter)="sendMessage()"
+            ></textarea>
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions>
+          <button
+            mat-raised-button
+            color="primary send-button"
+            (click)="sendMessage()"
+          >
+            Send
+          </button>
+          <button mat-raised-button color="accent" (click)="toggleRecording()">
+            {{ isRecording ? "Stop Recording" : "Start Recording" }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
