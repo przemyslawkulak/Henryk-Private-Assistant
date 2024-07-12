@@ -1,6 +1,8 @@
 import { Meal } from './utils/interfaces/meal';
 
-export const taskFinder = `Based on the user message, judge whether the message is complex. Tasks to choose from:
+export const taskFinder = `<instruction>Based on the user message, judge whether the message is complex. </instruction>
+<context>
+Tasks to choose from:
 0 no task to do - just simple answer needed
 1 shopping list - adding, removing items to shopping list, getting shopping lists, all actions connected with grocy application, adding/removing  new product to product list
 2 management playlist - all playlist CRUD operation
@@ -9,28 +11,55 @@ export const taskFinder = `Based on the user message, judge whether the message 
 5 to do list - managing tasks - adding, deleting, completing getting lis of tasks
 6 budget management
 7 calendar
+</context>
+<action_examples>
+Return only name of the task in Polish and number of the task in this JSON format eg. { "taskNumber": "0", "taskDescription": "lista zakupów"} and nothing else
+</action_examples>`;
 
-Return only name of the task in Polish and number of the task in this JSON format eg. { "taskNumber": "0", "taskDescription": "lista zakupów"} and nothing else`;
-
-export const identifyProducts = (message: string, products: string[], category: string[]) => {
-  return `Jesteś asystentem który dorzuca produkty do listy zakupowej. Masz polecenie: ${message}. \n  Znajdź produkty z polecenia szukając ich formy pojedynczej na liście ${JSON.stringify(
+export const identifyProducts = (
+  message: string,
+  products: string[],
+  category: string[]
+) => {
+  return `<instruction>
+  You are an assistant who adds products to the shopping list. You have the command: ${message}.
+  </instruction>
+   <context>
+   Find the products from the command by looking for their singular form in the list ${JSON.stringify(
     products
-  )} oraz ich id. Jeśli nie ma prodktu na liście to ustaw id_produktu na 0 \n Dopasuj do której kategorii pasuje konkretny produkt z listy: ${JSON.stringify(
+  )} and their id. If there is no product on the list, set product_id to 0 Match which category a specific product from the list fits into: ${JSON.stringify(
     category
-  )}.\n ###Przykładowa odpowiedź w formacie JSON: Polecenie: Dodaj 3 gruszki, Odpowiedź: {"products": [{"productName":"gruszka", productId: 1, "count":3, "categoryName": "Owoc", "categoryId": 4 }]}, zwróć tylko objekt ze wszystkimi produktami i nic więcej`;
+  )}.
+  </context>
+  <action_examples>
+  Sample response in JSON format: Command: Add 3 pears, Response: {"products": [{"productName":"pear", productId: 1, "count":3, "categoryName": "Fruit", "categoryId" :4 }]}, return only the object with all the products and nothing else
+  </action_examples>`;
 };
 
 export const findRecipe = (mealName: string) => {
-  return `I want to find most popular in Poland receipe and ingredients for ${mealName}, extract the ingredients and provide a brief recipe. The output should be formatted as a JSON object with the fields recipe and ingredients. Both fields should contain strings in markdown format.`;
+  return `<instruction>You are polish chef and you need to find most popular in Poland receipe and ingredients for ${mealName}, extract the ingredients and provide a brief recipe.</instruction>
+  <action_examples>
+  The output should be formatted as a JSON object with the fields recipe and ingredients. Both fields should contain strings in markdown format.
+  </action_examples>`;
 };
 
 export const findMeal = (mealList: Meal[]) => {
-  return `Select one random meal from the list and return all the ingredients from the recipe:  ${mealList
+  return `<instruction>
+  Select one random meal from the list and return all the ingredients from the recipe:  ${mealList
     .map((meal) => meal.name)
-    .join(', ')} Return in JSON format eg.  {"mealName": "scrambled eggs", "ingredients": "eggs, salt, peppeer"}`;
+    .join(', ')}
+    <instruction>
+     <action_examples>
+    Return in JSON format eg.  {"mealName": "scrambled eggs", "ingredients": "eggs, salt, peppeer"}
+    </action_examples>`;
 };
 export const findMealCondition = (message: string) => {
-  return `Cześć ChatGPT! Potrzebuję Twojej pomocy w przekształceniu zapytań użytkownika w tablicę zapytań do bazy danych Prisma na podstawie modelu Meal. Model wygląda tak:
+  return `<instruction>Cześć ChatGPT! Potrzebuję Twojej pomocy w przekształceniu zapytań użytkownika w tablicę zapytań do bazy danych Prisma na podstawie modelu Meal. Proszę, zaproponuj odpowiednie zapytanie na podstawie poniższej wiadomości użytkownika:
+
+Wiadomość użytkownika: ${message}
+  <instruction>
+  <context>
+   Model wygląda tak:
 model Meal {
   id        Int       @id @default(autoincrement())
   name      String
@@ -55,7 +84,8 @@ model Meal {
   soup      Boolean   @default(false)
   salad     Boolean   @default(false)
 }
-
+  </context>
+  <action_examples>
 Chciałbym, żebyś na podstawie wiadomości użytkownika określił, jakie zapytanie do bazy danych powinienem zrobić, aby otrzymać odpowiednią listę dań w formie tablicy JSON. Na przykład:
 
 Wiadomość użytkownika: "przejrzyj liste obiadów i wybierz losowo jedną zupę, jedno danie z makaronem, jedno z kaszą, dodatkowo jedno danie wege, jedno z rybą, oraz jedną sałatkę
@@ -165,8 +195,7 @@ Powinno zwrócić:
        chicken: true,
      }
    ]}
+     </action_examples>
 
-Proszę, zaproponuj odpowiednie zapytanie na podstawie poniższej wiadomości użytkownika:
-
-Wiadomość użytkownika: ${message}`;
+`;
 };
